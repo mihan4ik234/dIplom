@@ -1,0 +1,42 @@
+/* src/components/Header.css */
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1a202c; /* Более темный фон */
+    padding: 20px; /* Увеличенные отступы */
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+  
+  nav a {
+    color: #cbd5e0; /* Светлый цвет текста */
+    text-decoration: none;
+    flex: 1;
+    text-align: center;
+    font-size: 24px; /* Больший размер шрифта */
+    padding: 10px 0; /* Добавлены вертикальные отступы */
+    transition: color 0.3s, transform 0.3s; /* Плавность анимации */
+    border-radius: 5px; /* Скругление углов */
+  }
+  
+  nav a:hover, nav a.active {
+    color: #fff; /* Белый цвет текста при наведении и для активной ссылки */
+    transform: scale(1.1); /* Увеличение при наведении */
+    background-color: #2b6cb0; /* Голубой фон при наведении и для активной ссылки */
+  }
+  
+  @media (max-width: 600px) {
+    nav {
+      flex-direction: column;
+    }
+  
+    nav a {
+      padding: 15px 0; /* Увеличенные отступы для мобильных устройств */
+    }
+  }
+  

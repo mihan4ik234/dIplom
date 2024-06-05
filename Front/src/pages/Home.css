@@ -1,0 +1,60 @@
+/* src/pages/Home.css */
+
+.home-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f7fafc; /* Светлый фон */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень для создания эффекта объема */
+  }
+  
+  .home-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #2d3748; /* Темный цвет текста */
+    margin-bottom: 20px;
+    animation: fadeInTitle 1s ease-in-out; /* Анимация появления */
+  }
+  
+  .home-section {
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeInSection 1s ease-in-out forwards;
+  }
+  
+  .home-subtitle {
+    font-size: 1.75rem;
+    color: #2b6cb0; /* Голубой цвет подзаголовков */
+    margin-bottom: 10px;
+  }
+  
+  .home-text {
+    font-size: 1.2rem;
+    color: #4a5568; /* Темно-серый цвет текста */
+    line-height: 1.6;
+  }
+  
+  /* Анимации */
+  @keyframes fadeInTitle {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeInSection {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
