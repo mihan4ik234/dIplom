@@ -3,6 +3,9 @@ import axios from 'axios';
 
 function WrittenOff() {
   const [writtenOffProducts, setWrittenOffProducts] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage, setProductsPerPage] = useState(10);
+  const productsPerPageOptions = [5, 10, 15, 20];
 
   useEffect(() => {
     const fetchWrittenOffProducts = async () => {
@@ -36,6 +39,13 @@ function WrittenOff() {
     }
   };
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = writtenOffProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const handleProductsPerPageChange = (event) => setProductsPerPage(Number(event.target.value));
+
   return (
     <div>
       <h1>Списанные товары</h1>
@@ -54,7 +64,7 @@ function WrittenOff() {
           </tr>
         </thead>
         <tbody>
-          {writtenOffProducts.map((product) => (
+          {currentProducts.map((product) => (
             <tr key={product.id}>
               <td>{product.id}</td>
               <td>{product.name}</td>
@@ -72,6 +82,20 @@ function WrittenOff() {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        {Array.from({ length: Math.ceil(writtenOffProducts.length / productsPerPage) }, (_, i) => (
+          <button key={i + 1} onClick={() => paginate(i + 1)}>
+            {i + 1}
+          </button>
+        ))}
+      </div>
+      <div className="products-per-page-selector">
+        <select onChange={handleProductsPerPageChange} value={productsPerPage}>
+          {productsPerPageOptions.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

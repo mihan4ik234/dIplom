@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddProductButton from '../components/AddProductButton';
 import './Actual.css';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 function Actual() {
   const [products, setProducts] = useState([]);
@@ -15,6 +17,9 @@ function Actual() {
     purchase_date: '',
     receipt_date: '',
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage, setProductsPerPage] = useState(10);
+  const productsPerPageOptions = [5, 10, 15, 20];
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -86,6 +91,37 @@ function Actual() {
     }
   };
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const handleProductsPerPageChange = (event) => setProductsPerPage(Number(event.target.value));
+
+  // Функция для экспорта данных в PDF
+  const exportPDF = () => {
+    const doc = new jsPDF();
+    const tableColumn = ["ID", "Название", "Статус", "Статья закупки", "Количество", "Сумма", "Дата закупки", "Дата приёмки"];
+    const tableRows = [];
+    products.forEach(product => {
+      const productData = [
+        product.id,
+        product.name,
+        product.status,
+        product.purchase_article,
+        product.quantity,
+        product.amount,
+        product.purchase_date,
+        product.receipt_date,
+      ];
+      tableRows.push(productData);
+    });
+    doc.autoTable(tableColumn, tableRows, { startY: 20 });
+    const date = Date().split(" ");
+    const fileName = `report_${date[3]}-${date[1]}-${date[2]}.pdf`;
+    doc.save(fileName);
+  };
+
   return (
     <div className="actual-container">
       <AddProductButton onClick={() => setShowModal(true)} />
@@ -150,6 +186,7 @@ function Actual() {
           </div>
         </div>
       )}
+      <button style={{padding: "10px",right: "1500px", top: "500px"}} onClick={exportPDF}>Выгрузить в PDF</button>
       <table className="products-table">
         <thead>
           <tr>
@@ -165,7 +202,7 @@ function Actual() {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {currentProducts.map((product) => (
             <tr key={product.id}>
               <td>{product.id}</td>
               <td>{product.name}</td>
@@ -184,6 +221,20 @@ function Actual() {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        {Array.from({ length: Math.ceil(products.length / productsPerPage) }, (_, i) => (
+          <button key={i + 1} onClick={() => paginate(i + 1)}>
+            {i + 1}
+          </button>
+        ))}
+      </div>
+      <div className="products-per-page-selector">
+        <select onChange={handleProductsPerPageChange} value={productsPerPage}>
+          {productsPerPageOptions.map(option => (
+            <option key={option} value={option}>{option}</option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

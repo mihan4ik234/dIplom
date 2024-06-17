@@ -9,7 +9,6 @@ function Login() {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
 
-        // Простая валидация
         if (name === 'username' && value.trim() === '') {
             setErrors({ ...errors, username: 'Имя пользователя не должно быть пустым' });
         } else if (name === 'password' && value.trim().length < 6) {
@@ -21,10 +20,20 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (formData.username && formData.password.length >= 6) {
+        const validCredentials = [
+            { username: 'admin', password: 'admin' },
+            { username: 'buh', password: 'buhalter' }
+        ];
+        
+        const isValid = validCredentials.some(creds => formData.username === creds.username && formData.password === creds.password);
+
+        if (isValid) {
             console.log('Форма отправлена:', formData);
+            localStorage.setItem('isAuthenticated', 'true');
+            window.location.href = '/'; // Редирект на главную страницу
         } else {
             console.log('Ошибка валидации');
+            // Обработка ошибки аутентификации
         }
     };
 
